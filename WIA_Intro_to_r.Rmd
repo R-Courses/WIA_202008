@@ -96,7 +96,7 @@ Run the following code chunk to import the babynames dataset
 
 ```{r}
 getwd()
-babynames <- readr::read_csv("babynames.csv")
+babynames <- readr::read_csv("data/babynames.csv")
 ```
 
 Names and sex of babies born in the US from 1880 to 2017. 1.9M rows.
@@ -156,7 +156,7 @@ We can change working directories using the IDE or using code
 ```{r, eval = FALSE}
 # 
 # setwd("day01_02")
-# babynames <- readr::read_csv("babynames.csv", n_max = 10)
+# babynames <- readr::read_csv("data/babynames.csv", n_max = 10)
 # setwd("/cloud/project")
 
 ```
@@ -248,7 +248,7 @@ R’s base data structures can be organised by their dimensionality (1d, 2d, or 
 
 # Transform
 
-Let's learn a little bit on how to *Tranform* our data. Also referred to as data munging/preppying/tidying. 
+Let's learn a little bit on how to *Tranform* our data. Also referred to as data munging/prepping/tidying. 
 
 Follow long with slides
 
@@ -294,6 +294,9 @@ Alter the code to select just the `n` column:
 
 ```{r}
 select(babynames, name, prop)
+# 
+# babynames %>% 
+#   select(name, prop)
 ```
 
 *Select* helpers 
@@ -609,7 +612,7 @@ Remember - both of these functions may be helpful when we need data to look a ce
 Run the following code chunk to load the data and view top rows
 
 ```{r echo = FALSE}
-weather <- readr::read_csv("weather.csv") %>% 
+weather <- readr::read_csv("data/weather.csv") %>% 
   pivot_longer(d1:d31, names_to = "day", names_prefix = "d",
                values_to = "value", values_drop_na = TRUE) 
 weather %>% 
@@ -739,7 +742,7 @@ Today we will first work with `salaries.csv` data and explore this data set by v
 Let's start by importing the `salaries` data set first.
 
 ```{r}
-salaries <- read_csv("salaries.csv")
+salaries <- read_csv("data/salaries.csv")
 ```
 
 The data set contains the yearly salaries for academic positions based on years of experience, gender and discipline. 
@@ -1022,7 +1025,7 @@ my_plot + facet_grid(facet rows ~ facet columns)
 First, let's read the `wages` data in R.    
 
 ```{r}
-wages <- read_csv("wages.csv", na = c("","  ","NA"))
+wages <- read_csv("data/wages.csv", na = c("","  ","NA"))
 
 head(wages, 3)
 
@@ -1090,6 +1093,17 @@ ggplot(wages, aes(x=age, y=earn, color=sex)) +
 
 ```
 
+`geom_col` and `geom_bar`
+
+
+### Your Turn 2
+
+```{r}
+
+```
+
+
+
 # Model 
 
 Let's learn a little bit about modeling in R
@@ -1109,7 +1123,6 @@ Let's check out the distribution of our outcome variable `earn`
 Plot a histogram of `earn` and the log of `earn`
 
 ```{r}
-
 
 ```
 
@@ -1153,10 +1166,12 @@ mod1 %>% glance()
 #Returns data frame of model output related to original data points
 
 mod1 %>% augment()
+# 
+# mod1 %>% augment(data = wages)
 
 wages_noinf <-  wages %>% filter(!log(earn) == -Inf)
-
 mod1 %>% augment(data = wages_noinf)
+
 ```
 
 
