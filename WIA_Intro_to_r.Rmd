@@ -730,22 +730,10 @@ Some handy ones
 
 # Visualize
 
-Let's learn some foundational *Visualize* concepts and the essential packages for creating beautiful visuals in R
+Let's learn some foundational *visualization* concepts and the essential packages for creating beautiful visuals in R
 
-Follow long with the slides
+Follow long with the slides.
 
-## ggplot2
-
-Today we will first work with `salaries.csv` data and explore this data set by visualization. We will then use the `wages` data set for other examples and "your turn". 
-
-
-Let's start by importing the `salaries` data set first.
-
-```{r}
-salaries <- read_csv("data/salaries.csv")
-```
-
-The data set contains the yearly salaries for academic positions based on years of experience, gender and discipline. 
 
 - R has a variety of visualization tools.   
 - These tools can be general and applied to any field or data.   
@@ -757,7 +745,7 @@ The data set contains the yearly salaries for academic positions based on years 
 - ggplot2 -- See `?ggplot2::ggplot2`     
 
 
-*Base R visualization*
+## Base R visualization
 
 - Simplest plotting in R   
 - Not very pretty
@@ -777,16 +765,17 @@ plot(x, y)
 ```
 
 
-*ggplot2: Create Elegant Data Visualizations Using the Grammar of Graphics*
+## ggplot2: Create Elegant Data Visualizations Using the Grammar of Graphics
 
 + A system for 'declaratively' creating graphics, based on "The Grammar of Graphics". 
 + You provide the data, tell `ggplot2` how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 + Infinite options for the ultimate customization
 + It is part of the [tidyverse](http://tidyverse.org/), a collection of R packages that share common philosophies and are designed to work together.
-+ For coding references go to: https://ggplot2.tidyverse.org/reference/
++ To get help with ggplot2 go to: [ggplot2.tidyverse.org/reference/](https://ggplot2.tidyverse.org/reference/)
 
 
-   
+**Usage:**
+
 1. Start with `ggplot()`, 
     - supply a dataset   
     - and aesthetic mapping using `aes()`. 
@@ -797,59 +786,72 @@ plot(x, y)
     - Faceting specifications with `facet_` functions   
     - Coordinate systems with `coord_` functions   
 
-*Building a ggplot from scratch with `salaries` *
 
-_Step 0: Let's refresh on  the `salaries` data_
+## Plot `salaries` step by step
+
+### Step 0: The `salaries` data
+
+Today we will first work with `salaries.csv` data and explore this data set by visualization. We will then use the `wages` data set for other examples and "your turn". 
+
+Let's start by importing the `salaries` data set first.
+
+```{r}
+salaries <- read_csv("data/salaries.csv")
+```
+
+The data set contains the yearly salaries for academic positions based on years of experience, gender and discipline.
+
+Let's take a look at `salaries`
+
 ```{r}
 head(salaries, 3)
 summary(salaries)
 ```
 
 
-*Step 1. Define data and aesthetics with `aes()`*
+### Step 1. Define data and aesthetics with `aes()`
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary))
 ```
 
-*Step 2. Define plot type with `geom_`*
+### Step 2. Define plot type with `geom_`*
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary)) + 
   geom_point()
 ```
 
-*Step 3. Assign more aesthetics*
 
-*Step 3.1 Add aesthetics: `color`*
+### Step 3.1 Add aesthetics: `color`
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary)) + 
   geom_point(aes(color=discipline))
 ```
 
-*Step 3.2 Add aesthetics: `color` + `size`*
+### Step 3.2 Add aesthetics: `color` + `size`
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary)) + 
   geom_point(aes(color=discipline, size=yrs.since.phd))
 ```
 
-*Step 3.3  Add aesthetics: `color` + `size` + `shape`*
+### Step 3.3  Add aesthetics: `color` + `size` + `shape`
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary)) + 
   geom_point(aes(color=discipline, size=yrs.since.phd, shape=rank))
 ```
 
-*Step 3.4  Add aesthetics: (`color` + `size` + `shape`) + `alpha`  (transparency)*
+### Step 3.4  Add aesthetics: (`color` + `size` + `shape`) + `alpha`  (transparency)
 
 ```{r}
 ggplot(data=salaries, aes(x=yrs.service, y=salary)) + 
   geom_point(aes(color=discipline, size=yrs.since.phd, shape=rank), alpha=0.6)
 ```
 
-*Step 4: Assign more `geom`: `point` + `smooth`*
+### Step 4: Assign more `geom`: `point` + `smooth`
 
 What do you think the following will give me?
 
@@ -885,10 +887,10 @@ ggplot(data=salaries, aes(x=yrs.service, y=salary)) +
   geom_smooth(aes(color=discipline))
 ```
 
-Now the color is only defined in the `geom_smooth` and not for `geom_point`
+Now the color is only defined in the `geom_smooth` and not for `geom_point`!
 
 
-**Step 5: Pretty up our plot**
+### Step 5: Pretty up your plot
 
 Before we start, let's took couple of steps back, and remove shape and size aesthetics to simplify our plot.
 
@@ -1082,7 +1084,7 @@ pw + facet_wrap(~age_cat, ncol=5)
 
 ### Your Turn 1 
 
-Split into groups and try to replicate the plot shown on slide!
+Try to replicate the plot shown on the slide!
 
 ```{r}
 ggplot(wages, aes(x=age, y=earn, color=sex)) +
@@ -1093,38 +1095,70 @@ ggplot(wages, aes(x=age, y=earn, color=sex)) +
 
 ```
 
-`geom_col` and `geom_bar`
+## Bar plots
 
+So far we only plotted scatter (point) plots. Let's focus on some bar plots:
 
-### Your Turn 2
+### Bar plots
 
 ```{r}
-
+salaries %>%
+  ggplot(aes(rank)) +
+  geom_bar()
 ```
+
+### Column plots
+
+### Your turn 2
+
+Plot *average yearly salaries by rank* as a column plot.
+Fill in the blanks with variable names.
+
+```{r}
+salaries %>%
+  group_by(___) %>%
+  summarise(mean(___)) %>%
+  ggplot(aes(___)) +
+    geom_col()
+```
+
+Do you see the main difference between `geom_col` and `geom_bar`?
 
 
 
 # Model 
 
 Let's learn a little bit about modeling in R
-
 Follow along with the slides
 
-Remember, wages features income predictors extracted from the National Longitudinal Study, sponsored by the U.S. BLS
+Let's work with our `salaries` data set.
 
-Let's work with our wages data set
+First let's do a few preliminary steps to modeling.
 
-First let's do a few preliminary steps to modeling. 
+Let's check out the distribution of our outcome variable `salary`:
+Plot the histogram of `salary`.
 
-Let's check out the distribution of our outcome variable `earn`
+```{r}
+hist(salaries$salary)
+```
 
-### Your Turn 1 
+Alternatively with ggplot:
 
-Plot a histogram of `earn` and the log of `earn`
+```{r}
+salaries %>%
+  ggplot(aes(salary)) + 
+  geom_histogram(bins=20)
+```
+
+
+### Your Turn 1
+
+Look at the distribution of `yrs.since.phd`
 
 ```{r}
 
 ```
+
 
 Let's load some key packages we'll need
 
@@ -1134,19 +1168,16 @@ Let's load some key packages we'll need
 
 library(modelr)
 library(broom)
-
 ```
 
-Let's fit a model predicting the log of earn from education and look at the output
+Let's fit a model predicting the salary of a professor based on years passed since they earned their PhD degree.
 
 ```{r}
-mod1 <- lm(log(earn) ~ ed, data = wages)
-
+mod1 <- lm(salary ~ yrs.since.phd, data = salaries)
 summary(mod1)
-
 ```
 
-- Output is not tidy, or even a dataframe.. would be hard to plot results
+- Output is not tidy, or even a data frame, therefore it would be hard to plot results.
 
 Broom includes three functions which work for most types of models (and can be extended to more):
 
@@ -1156,124 +1187,57 @@ Broom includes three functions which work for most types of models (and can be e
 
 ```{r}
 #tidy() returns useful model output as a data from 
-
 mod1 %>% tidy()
 
 #Returns common model diagnostics as a data frame
-
 mod1 %>% glance()
 
 #Returns data frame of model output related to original data points
-
 mod1 %>% augment()
-# 
-# mod1 %>% augment(data = wages)
+```
 
-wages_noinf <-  wages %>% filter(!log(earn) == -Inf)
-mod1 %>% augment(data = wages_noinf)
 
+What if we wanted to add multiple predictors?
+
+**Multivariate regression**
+
+We can simply add predictors using a `+` signed after the `~` 
+
+```{r}
+mod2 <- lm(salary ~ yrs.since.phd + yrs.service, data = salaries)
+```
+
+Alternatively, we can fit the model for all variables in a model by only providing a `.` after `~`:
+
+```{r}
+mod2 <- lm(salary ~ ., data = salaries)
+summary(mod2)
 ```
 
 
 ## Your Turn 2
 
-Use a pipe to model `log(income)` against `height`. Call the model `mod_h`
+Use a pipe to model `salary` against `yrs.since.phd`, `yrs.service` and `sex` . Call the model `mod_multi`
 Then use broom and dplyr functions to extract:
 
-1. The **coefficient estimates** and their related statistics 
-2. The **adj.r.squared** and **p.value** for the overall model
+- The **coefficient estimates** and their related statistics 
+- The **adj.r.squared** and **p.value** for the overall model
 
-```{r}
+Then determine:
 
-```
+- The term with the smallest p-value.
+- The term with the largest coefficient estimate.
 
-What if we wanted to add multiple predictors?
-
-*Multivariate regression*
-
-We can simply add predictors using a `+` signed after the `~` 
-
-```{r eval = FALSE}
-glm(log(earn) ~ height + sex + age + ed + race, data = wages)
-
-wages %>% 
-  lm(log(earn) ~ ed + height, data = .) %>% 
-  tidy()
-
-
-```
-
-
-## Your Turn 3
-
-Model `log(income)` against `education` and `height` and `sex`. 
-Name the model `mod_ehs`
-Can you interpret the coefficients?
 
 ```{r}
 
 
-
-# # In case you haven't made the ehs model
-# mod_ehs <- wages %>% lm(log(earn) ~ ed + height + sex, data = .)
-
-```
-
-What is the difference between Mean log(income) for a female vs a male?
-
-We can also use some `modelr` function to make predictions on new data 
-
-For example, we could use the model `mod_ehs` we just fit and the values in the 
-data frame provided to generate a prediction for each case in our df 
-
-
-```{r eval=FALSE}
-wages %>% add_predictions(mod_ehs)
-```
-
-Similarly, We can use the values in a data frame to generate a residual for each case. 
-
-```{r eval = FALSE}
-wages %>% add_residuals(mod_ehs)
-```
-
-
-
-## Your Turn 4
-
-Use `add_predictions` to make the plot shown in the slides 
-
-```{r warning = FALSE, message = FALSE, eval=FALSE}
-
-
-# Make plot here
-
-```
-
-Lastly, `modelr` makes comparing multiple models easy. 
-
-We can compare residuals for the models we've created above using `spread_residuals()` and 
-`gather_residauls()`
-
-- `spread_residuals()` will add residuals for the models we specify, to their own column
-    + like `pivot_wider()` from earlier
-- `gather_residuals()` will create "key:value" columns and a long data set, may be more useful for plotting 
-    + like `pivot_longer` from earlier
-
-```{r eval = FALSE}
-wages %>% spread_residuals(mod_h, mod_ehs)
-
-wages %>% gather_residuals(mod_h, mod_ehs) %>% arrange(desc(resid))
 ```
 
 
 # Take Aways
 
 * Use `glance()`, `tidy()`, and `augment()` from the **broom** package to return model values in a data frame.
-
-* Use `add_predictions()` or `gather_predictions()` or `spread_predictions()` from the **modelr** package to visualize predictions.
-
-* Use `add_residuals()` or `gather_residuals()` or `spread_residuals()` from the **modelr** package to visualize residuals.
 
 
 
