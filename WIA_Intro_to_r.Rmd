@@ -1114,7 +1114,7 @@ salaries %>%
 Plot *average yearly salaries by rank* as a column plot.
 Fill in the blanks with variable names.
 
-```{r}
+```{r, eval=FALSE}
 salaries %>%
   group_by(___) %>%
   summarise(mean(___)) %>%
@@ -1123,7 +1123,6 @@ salaries %>%
 ```
 
 Do you see the main difference between `geom_col` and `geom_bar`?
-
 
 
 # Model 
@@ -1160,13 +1159,23 @@ Look at the distribution of `yrs.since.phd`
 ```
 
 
+### Your Turn 2
+
+Now, plot `salary` against `yrs.since.phd` using `ggplot` and fit a linear model:
+
+```{r, eval=FALSE}
+salaries %>%
+  ggplot(aes(___, ___)) +
+  geom____() +
+  geom_smooth(method = "lm")
+```
+
+
 Let's load some key packages we'll need
 
 ```{r}
-# install.packages('modelr')
 # install.packages('broom')
 
-library(modelr)
 library(broom)
 ```
 
@@ -1215,13 +1224,13 @@ summary(mod2)
 ```
 
 
-## Your Turn 2
+## Your Turn 3
 
-Use a pipe to model `salary` against `yrs.since.phd`, `yrs.service` and `sex` . Call the model `mod_multi`
+Model `salary` against `yrs.since.phd`, `yrs.service` and `discipline` . Call the model `mod_multi`
 Then use broom and dplyr functions to extract:
 
 - The **coefficient estimates** and their related statistics 
-- The **adj.r.squared** and **p.value** for the overall model
+- The **r.squared** and **p.value** for the overall model
 
 Then determine:
 
@@ -1229,15 +1238,35 @@ Then determine:
 - The term with the largest coefficient estimate.
 
 
-```{r}
+```{r, eval=FALSE}
+mod_multi <- lm(salary ~ ________, data = salaries) 
+glance(mod_multi)
 
+```
 
+## Prediction
+
+Let's predict the salary of some imaginary professors based on `mod_multi`:
+
+```{r, eval=FALSE}
+i_profs <- tribble(
+   ~discipline, ~yrs.since.phd, ~yrs.service,
+   "A"        , 10            , 8           ,
+   "B"        , 20            , 16          ,
+   "A"        , 3             , 1           ,
+   "B"        , 22            , 8           
+)
+
+predict(mod_multi, i_profs)
 ```
 
 
 # Take Aways
 
+* Use *formula* method to define a model and fit it to the data
 * Use `glance()`, `tidy()`, and `augment()` from the **broom** package to return model values in a data frame.
+* Use `predict()` to predict results of a model.
+
 
 
 
